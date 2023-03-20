@@ -8,9 +8,15 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  # Manual run from GitHub UI
+  workflow_dispatch:
+  # Wednesdays at 0400
+#  schedule:
+#    - cron: '0 4 * * 3'
 
 jobs:
   build-and-test:
+    timeout-minutes: 2
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,7 +37,10 @@ jobs:
     - name: Test using Cypress - E2E
       uses: cypress-io/github-action@v5
       with:
-        start: npm run dev
+        # Test against the built app
+        start: npm run preview
+        wait-on: 'http://localhost:4173/ci'
+        config: baseUrl='http://localhost:4173/ci'
     - name: Test using Cypress - Component
       uses: cypress-io/github-action@v5
       with:
