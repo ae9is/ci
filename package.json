@@ -30,8 +30,9 @@
     "build:vite": "vite build",
     "dev": "run-s dev:*",
     "dev:vite": "vite --port 3000",
+    "preview": "vite preview --outDir docs",
     "test": "run-p test:*",
-    "test:cypress:e2e": "start-server-and-test dev http://localhost:3000 cypress:run:e2e",
+    "test:cypress:e2e": "start-server-and-test preview http://localhost:4173/ci cypress:run:e2e",
     "test:cypress:comp": "cypress:run:comp",
     "test:vitest": "npm run vitest",
     "cypress:run": "run-p cypress:run:*",
@@ -41,8 +42,7 @@
     "cypress:open": "CYPRESS_CRASH_REPORTS=0 cypress open",
     "vitest": "vitest run",
     "format": "prettier --write src cypress",
-    "lint": "eslint src cypress",
-    "preview": "vite preview --outDir docs"
+    "lint": "eslint src cypress"
   },
   "tsup": {
     "entry": [
