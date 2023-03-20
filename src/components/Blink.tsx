@@ -7,6 +7,8 @@ export interface BlinkProps extends React.ComponentPropsWithoutRef<'div'> {
 export default function Blink(props: BlinkProps) {
   const { children, ...rest } = props
   return (
-    <div className='blink' {...rest}>{children}</div>
+    <div className="blink" {...rest}>
+      {children}
+    </div>
   )
 }
