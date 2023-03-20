@@ -34,22 +34,20 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
-    # Warning: This can't be used across node versions or with npm ci
+    # Warning: Caching node_modules can't be used across node versions or with npm ci
     # ref: https://github.com/actions/cache/blob/main/examples.md#node---npm
-    - name: Cache node_modules
-      id: cache-node-modules
+    - name: Cache node_modules and Cypress
+      id: cache-deps
       uses: actions/cache@v3
       with:
-        path: node_modules
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        # Always retrieve from cache if possible, but partial cache hit results in 
-        #  cache-hit = false
-        restore-keys: |
-          ${{ runner.os }}-node-modules-
+        path: |
+          node_modules
+          ~/.cache/Cypress
+        key: ${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}
 
     - name: Install
       # Run install unless exact cache hit occurred i.e. package-lock.json did not change
-      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      if: steps.cache-deps.outputs.cache-hit != 'true'
       run: npm install
 
     - name: Build
