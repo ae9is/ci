@@ -4,10 +4,10 @@
 name: main
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
   # Manual run from GitHub UI
   workflow_dispatch:
   # Wednesdays at 0400
@@ -37,10 +37,9 @@ jobs:
     - name: Test using Cypress - E2E
       uses: cypress-io/github-action@v5
       with:
-        # Test against the built app
+        # Test against the build
         start: npm run preview
-        wait-on: 'http://localhost:4173/ci'
-        config: baseUrl='http://localhost:4173/ci'
+      timeout-minutes: 1
     - name: Test using Cypress - Component
       uses: cypress-io/github-action@v5
       with:
