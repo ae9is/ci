@@ -1,0 +1,72 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+# Fast workflow for testing performance optimisations
+
+name: fast
+
+on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+  # Manual run from GitHub UI
+  workflow_dispatch:
+  # Wednesdays at 0400
+#  schedule:
+#    - cron: '0 4 * * 3'
+
+jobs:
+  build-and-test:
+    timeout-minutes: 2
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [lts/*]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    # Warning: This can't be used across node versions or with npm ci
+    # ref: https://github.com/actions/cache/blob/main/examples.md#node---npm
+    - name: Cache node_modules
+      id: cache-node-modules
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+        # Always retrieve from cache if possible, but partial cache hit results in 
+        #  cache-hit = false
+        restore-keys: |
+          ${{ runner.os }}-node-modules-
+
+    - name: Install
+      # Run install unless exact cache hit occurred i.e. package-lock.json did not change
+      if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      run: npm install
+
+    - name: Build
+      run: npm run build --if-present
+
+    - name: Test using Cypress - E2E
+      uses: cypress-io/github-action@v5
+      with:
+        # Test against the build we just created
+        start: npm run preview
+        config: baseUrl=http://localhost:4173/ci/
+      timeout-minutes: 1
+
+    - name: Test using Cypress - Component
+      uses: cypress-io/github-action@v5
+      with:
+        component: true
+
+    - name: Test using Vitest
+      run: npm run test:vitest
