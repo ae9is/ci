@@ -55,18 +55,5 @@ jobs:
     - name: Build
       run: npm run build --if-present
 
-    - name: Test using Cypress - E2E
-      uses: cypress-io/github-action@v5
-      with:
-        # Test against the build we just created
-        start: npm run preview
-        config: baseUrl=http://localhost:4173/ci/
-      timeout-minutes: 1
-
-    - name: Test using Cypress - Component
-      uses: cypress-io/github-action@v5
-      with:
-        component: true
-
-    - name: Test using Vitest
-      run: npm run test:vitest
+    - name: Test
+      run: npm run test
