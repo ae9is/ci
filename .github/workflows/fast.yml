@@ -48,7 +48,7 @@ jobs:
         path: |
           node_modules
           ~/.cache/Cypress
-        key: node-v${{ matrix.node-version }}-on-${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}
+        key: node-${{ matrix.node-version }}-on-${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}
 
     - name: Install
       # Run install unless exact cache hit occurred i.e. package-lock.json did not change
