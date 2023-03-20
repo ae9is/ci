@@ -24,6 +24,11 @@ jobs:
       matrix:
         node-version: [lts/*]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    env:
+      # Suppresses annoying warning https://github.com/cypress-io/cypress/issues/15679
+      TERM: xterm
+      # Suppress Cypress installation progress messages
+      CI: 1
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -43,7 +48,7 @@ jobs:
         path: |
           node_modules
           ~/.cache/Cypress
-        key: ${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}
+        key: node-v${{ matrix.node-version }}-on-${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}
 
     - name: Install
       # Run install unless exact cache hit occurred i.e. package-lock.json did not change
