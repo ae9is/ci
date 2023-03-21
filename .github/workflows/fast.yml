@@ -62,20 +62,25 @@ jobs:
     - name: Test
       run: npm run test
 
-  rebuild-docs:
-    needs: [build-and-test]
-    # Check for event type should be unnecessary, but more explicitly prevent pull requests from triggering just in case
-    if: startsWith(github.event.head_commit.message, 'release:') && github.event_name == 'push'
-    timeout-minutes: 1
-    runs-on: ubuntu-latest
-    steps:
+    # For push events only, rebuild docs page and create a tag.
+    # Ideally this would be in a separate job, but jobs execute on different runners which means 
+    #  some duplication with above.
+
+    - name: Test is release
+      if: startsWith(github.event.head_commit.message, 'release:') && github.event_name == 'push'
+      id: isRelease
+      run: |
+        echo ::set-output name=value::'true'
+
     - name: Get release version string
+      if: steps.isRelease.outputs.value
       id: getVersion
       run: |
         VALUE=$(echo ${{ github.event.head_commit.message }} | sed 's/release://' | sed 's/[[:space:]]*//g')
         echo ::set-output name=value::$VALUE
 
     - name: Commit /docs
+      if: steps.isRelease.outputs.value
       # EndBug/add-and-commit@v9.1.1
       uses: EndBug/add-and-commit@61a88be553afe4206585b31aa72387c64295d08b
       with:
@@ -83,6 +88,7 @@ jobs:
         message: "ci: rebuild docs for release ${{ steps.getVersion.outputs.value }}"
 
     - name: Create tag
+      if: steps.isRelease.outputs.value
       uses: actions/github-script@v6
       with:
         script: |
