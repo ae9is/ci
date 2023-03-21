@@ -5,11 +5,12 @@
 
 name: fast
 
+# Any event listed can trigger build/test; only push triggers docs build and new tag
 on:
-#  push:
-#    branches: [ "main" ]
-#  pull_request:
-#    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
   # Manual run from GitHub UI
   workflow_dispatch:
   # Wednesdays at 0400
@@ -63,7 +64,8 @@ jobs:
 
   rebuild-docs:
     needs: [build-and-test]
-    if: startsWith(github.event.head_commit.message, 'release:')
+    # Check for event type should be unnecessary, but more explicitly prevent pull requests from triggering just in case
+    if: startsWith(github.event.head_commit.message, 'release:') && github.event_name == 'push'
     timeout-minutes: 1
     runs-on: ubuntu-latest
     steps:
