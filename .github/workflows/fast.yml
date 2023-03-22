@@ -17,6 +17,10 @@ on:
 #  schedule:
 #    - cron: '0 4 * * 3'
 
+permissions:
+  pages: write
+  contents: write
+
 jobs:
   build-and-test:
     timeout-minutes: 2
@@ -70,14 +74,14 @@ jobs:
       if: startsWith(github.event.head_commit.message, 'release:') && github.event_name == 'push'
       id: isRelease
       run: |
-        echo ::set-output name=value::'true'
+        echo "{value}={'true'}" >> $GITHUB_OUTPUT
 
     - name: Get release version string
       if: steps.isRelease.outputs.value
       id: getVersion
       run: |
         VALUE=$(echo ${{ github.event.head_commit.message }} | sed 's/release://' | sed 's/[[:space:]]*//g')
-        echo ::set-output name=value::$VALUE
+        echo "{value}={$VALUE}" >> $GITHUB_OUTPUT
 
     - name: Commit /docs
       if: steps.isRelease.outputs.value
