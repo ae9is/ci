@@ -74,14 +74,14 @@ jobs:
       if: startsWith(github.event.head_commit.message, 'release:') && github.event_name == 'push'
       id: isRelease
       run: |
-        echo "{value}={'true'}" >> $GITHUB_OUTPUT
+        echo "value=true" >> $GITHUB_OUTPUT
 
     - name: Get release version string
       if: steps.isRelease.outputs.value
       id: getVersion
       run: |
         VALUE=$(echo ${{ github.event.head_commit.message }} | sed 's/release://' | sed 's/[[:space:]]*//g')
-        echo "{value}={$VALUE}" >> $GITHUB_OUTPUT
+        echo "value=${VALUE}" >> $GITHUB_OUTPUT
 
     - name: Commit /docs
       if: steps.isRelease.outputs.value
