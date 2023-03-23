@@ -1,0 +1,49 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: tests
+
+on:
+#  push:
+#    branches: [ "main" ]
+#  pull_request:
+#    branches: [ "main" ]
+  # Manual run from GitHub UI
+  workflow_dispatch:
+  # Wednesdays at 0400
+#  schedule:
+#    - cron: '0 4 * * 3'
+
+jobs:
+  build-and-test:
+    timeout-minutes: 2
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [lts/*]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Install
+      run: npm ci
+    - name: Build
+      run: npm run build --if-present
+    - name: Test using Cypress - E2E
+      uses: cypress-io/github-action@v5
+      with:
+        # Test against the build we just created
+        start: npm run preview
+        config: baseUrl=http://localhost:4173/ci/
+      timeout-minutes: 1
+    - name: Test using Cypress - Component
+      uses: cypress-io/github-action@v5
+      with:
+        component: true
+    - name: Test using Vitest
+      run: npm run test:vitest
