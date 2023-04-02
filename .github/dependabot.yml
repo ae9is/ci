@@ -9,7 +9,11 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+    commit-message:
+      prefix: "build([skip ci])"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "monthly"
+    commit-message:
+      prefix: "build([skip ci])"
