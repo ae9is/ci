@@ -1,7 +1,14 @@
-# Action to combine Dependabot (or other) PRs
+# Action to combine Dependabot (or other) PRs.
 #
 # Slightly modified from https://github.com/hrvey/combine-prs-workflow
 # SPDX-License-Identifier: MIT
+#
+# Make sure to enable "Read and write permissions" plus "Allow GitHub Actions to create and approve pull requests"
+#  under repository Settings -> Actions -> General.
+#
+# You'll likely also want to increase the number of allowed open PRs Dependabot can create from the 
+#  default 5 to some higher number. This will allow CombineBot to update more dependencies at once.
+#
 
 name: 'combinebot'
 
@@ -122,7 +129,8 @@ jobs:
                 sha: baseBranchSHA
               });
             } catch (error) {
-              console.log(error);
+              // Note: error messages may contain github token and github will make a best effort to redact but this is not guaranteed
+              // console.log(error);
               core.setFailed('Failed to create combined branch - maybe a branch by that name already exists?');
               return;
             }
