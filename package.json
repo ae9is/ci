@@ -43,7 +43,8 @@
     "cypress:open": "CYPRESS_CRASH_REPORTS=0 cypress open",
     "vitest": "vitest run",
     "format": "prettier --write src cypress",
-    "lint": "eslint src cypress"
+    "lint": "eslint src cypress",
+    "upgrade-packages": "ncu -u"
   },
   "tsup": {
     "entry": [
@@ -81,6 +82,7 @@
     "eslint-plugin-react": "^7.32.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^21.1.1",
+    "npm-check-updates": "^16.10.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.8.7",
     "react": "^18.2.0",
