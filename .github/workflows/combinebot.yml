@@ -50,19 +50,20 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
+    # Need to use a custom token (not the default GITHUB_TOKEN) in order to trigger further workflow runs.
+    # This is needed to trigger (for ex.) build and test workflow(s) from the CombineBot PR to main.
+    # Which in turn allows disabling CI for every single Dependabot PR, instead just running in batches 
+    #  on the CombineBot PR.
+    # ref: https://github.com/octokit/request-action/issues/12
+    # ref: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
+    environment: combinebot
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/github-script@v6
         id: create-combined-pr
         name: Create Combined PR
         with:
-          # Need to use a custom token (not the default GITHUB_TOKEN) in order to trigger further workflow runs.
-          # This is needed to trigger (for ex.) build and test workflow(s) from the CombineBot PR to main.
-          # Which in turn allows disabling CI for every single Dependabot PR, instead just running in batches 
-          #  on the CombineBot PR.
-          # ref: https://github.com/octokit/request-action/issues/12
-          # ref: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
-          environment: combinebot
           github-token: ${{secrets.COMBINEBOT_PAT}}
           # github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
