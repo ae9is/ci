@@ -44,6 +44,7 @@
     "vitest": "vitest run",
     "format": "prettier --write src cypress",
     "lint": "eslint src cypress",
+    "upgrade": "npm run upgrade-packages && npm install && npm test",
     "upgrade-packages": "ncu -u"
   },
   "tsup": {
@@ -68,18 +69,18 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
-    "@types/node": "^18.11.18",
+    "@types/node": "^18.15.11",
     "@types/react": "^18.0.32",
-    "@types/react-dom": "^18.0.10",
+    "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
-    "@vitejs/plugin-react-swc": "^3.0.0",
+    "@vitejs/plugin-react-swc": "^3.2.0",
     "cypress": "^12.9.0",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-cypress": "^2.13.2",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.32.1",
+    "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "jsdom": "^21.1.1",
     "npm-check-updates": "^16.10.0",
@@ -89,8 +90,8 @@
     "react-dom": "^18.2.0",
     "start-server-and-test": "^2.0.0",
     "tsup": "^6.7.0",
-    "typescript": "^4.9.5",
-    "vite": "<=4.1.4",
+    "typescript": "^5.0.3",
+    "vite": "^4.2.1",
     "vitest": "^0.29.8"
   }
 }
