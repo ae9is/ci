@@ -9,6 +9,10 @@
 # You'll likely also want to increase the number of allowed open PRs Dependabot can create from the 
 #  default 5 to some higher number. This will allow CombineBot to update more dependencies at once.
 #
+# Finally, to allow CombineBot PRs to trigger further CI, this script by default uses a custom 
+#  personal access token "COMBINEBOT_PAT" stored as a secret in the repository environment "combinebot".
+#  You'll need to comment out this below to use the default GITHUB_TOKEN instead.
+#
 
 name: 'combinebot'
 
@@ -52,7 +56,15 @@ jobs:
         id: create-combined-pr
         name: Create Combined PR
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          # Need to use a custom token (not the default GITHUB_TOKEN) in order to trigger further workflow runs.
+          # This is needed to trigger (for ex.) build and test workflow(s) from the CombineBot PR to main.
+          # Which in turn allows disabling CI for every single Dependabot PR, instead just running in batches 
+          #  on the CombineBot PR.
+          # ref: https://github.com/octokit/request-action/issues/12
+          # ref: https://docs.github.com/en/actions/security-guides/automatic-token-authentication#using-the-github_token-in-a-workflow
+          environment: combinebot
+          github-token: ${{secrets.COMBINEBOT_PAT}}
+          # github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const pulls = await github.paginate('GET /repos/:owner/:repo/pulls', {
               owner: context.repo.owner,
