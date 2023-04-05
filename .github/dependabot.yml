@@ -11,7 +11,7 @@ updates:
       interval: "monthly"
     commit-message:
       prefix: "build([skip ci])"
-    open-pull-requests-limit: 20
+    open-pull-requests-limit: 0 #20
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
