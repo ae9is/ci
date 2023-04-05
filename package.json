@@ -44,7 +44,7 @@
     "vitest": "vitest run",
     "format": "prettier --write src cypress",
     "lint": "eslint src cypress",
-    "upgrade": "npm run upgrade-packages && npm install && npm test",
+    "upgrade": "npm run upgrade-packages && npm install && npm build && npm test",
     "upgrade-packages": "ncu -u"
   },
   "tsup": {
