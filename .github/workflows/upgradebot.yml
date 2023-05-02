@@ -58,11 +58,14 @@ jobs:
           ~/.cache/Cypress
         key: node-${{ matrix.node-version }}-on-${{ runner.os }}-deps-${{ hashFiles('package-lock.json') }}
 
+    - name: Install
+      run: npm ci
+    
     - name: Upgrade packages
       run: npm run upgrade-packages
 
     # Note: not npm ci, we want the lockfile to change
-    - name: Install
+    - name: Install updates
       run: npm install
 
     - name: Build
@@ -72,7 +75,6 @@ jobs:
       run: npm run test
 
     - name: Commit package.json updates
-      # EndBug/add-and-commit@v9.1.1
       uses: EndBug/add-and-commit@b97a9fe893e2984b63d00feaee5922e16ab1cc1e
       with:
         default_author: github_actions
