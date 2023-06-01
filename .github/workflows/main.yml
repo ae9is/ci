@@ -85,7 +85,7 @@ jobs:
 
     - name: Commit /docs
       if: steps.isRelease.outputs.value
-      uses: EndBug/add-and-commit@b97a9fe893e2984b63d00feaee5922e16ab1cc1e
+      uses: EndBug/add-and-commit@1bad3abcf0d6ec49a5857d124b0bfb52dc7bb081
       with:
         default_author: github_actions
         add: 'docs'
