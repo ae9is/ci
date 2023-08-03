@@ -30,6 +30,7 @@ jobs:
         node-version: [lts/*]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     env:
+      MSG: ${{ github.event.head_commit.message }}
       # Suppresses annoying warning https://github.com/cypress-io/cypress/issues/15679
       TERM: xterm
       # Suppress Cypress installation progress messages
@@ -80,7 +81,7 @@ jobs:
       if: steps.isRelease.outputs.value
       id: getVersion
       run: |
-        VALUE=$(echo ${{ github.event.head_commit.message }} | sed 's/release://' | sed 's/[[:space:]]*//g')
+        VALUE=$(echo '$MSG' | sed 's/release://' | sed 's/[[:space:]]*//g')
         echo "value=${VALUE}" >> $GITHUB_OUTPUT
 
     - name: Commit /docs
